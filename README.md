@@ -1,75 +1,48 @@
-You're absolutely right — here is a **short and concise `README.md`** — no extra fluff, to the point ✅:
-
----
-
-```markdown
-# Internship Assignment - Frontend & Backend Integration Tasks
-
-Multiple tasks using HTML, JavaScript, and Node.js/Express backend.
-
-## Folder Structure
-
-```
-
-├── Optional Enhancement/
-├── Task1/ to Task6/
-├── server.js
-├── package.json
-├── .env
-└── README.md
-
-````
+# Internship Assignment - Frontend & Backend Integration
 
 ## How to Run
 
-### Prerequisites
-
-- Node.js (v14+)
-
-### Setup
-
+1. Install dependencies:
 ```bash
-npm install express dotenv cors nodemon
-````
+npm install
+npm i express
+npm i cors
+npm i nodemon
+npm i dotenv
+```
 
-### Configure (optional)
-
-`.env`:
-
+2. Create `.env` file:
 ```
 PORT=3000
 ```
 
-### Run Server
-
+3. Start server:
 ```bash
 npm run dev
 ```
 
-### Open HTML Files
+## Project Structure
+```
+├── Task1/ to Task6/
+├── Optional Enhancement/
+├── server.js
+├── package.json
+└── .env
+```
 
-| Task                 | File                            |
-| -------------------- | ------------------------------- |
-| Task1                | Task1/index.html                |
-| Task2                | Task2/index.html                |
-| Task3                | Task3/index.html                |
-| Task4                | Task4/index.html                |
-| Task5                | Task5/index.html                |
-| Task6                | Task6/index.html                |
-| Optional Enhancement | Optional Enhancement/index.html |
+## Tasks
 
-**Note:** For Task3, Task4, and Optional Enhancement — server must be running (`/greet` API).
+| Task | File | Server Required |
+|------|------|-----------------|
+| Task 1-2, 5-6 | `TaskX/index.html` | No |
+| Task 3-4, Optional | `TaskX/index.html` | **Yes** |
 
 ## API
 
-POST `/greet`
-
+**POST** `/greet`
 ```json
-{ "name": "John" }
+Request: { "name": "John" }
+Response: { "message": "Hello John" }
 ```
 
-Response:
-
-```json
-{ "message": "Hello John" }
-```
+**Note:** Start server before running Task 3, Task 4, and Optional Enhancement.
