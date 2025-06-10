@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hello Your Name</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="h-screen bg-gradient-to-br from-[#03010f] via-[#131040] to-[#0f0f1b] flex items-center justify-center font-sans">
+
+  <!-- Container -->
+  <div
+    class="text-center p-8 rounded-3xl shadow-2xl border border-white border-opacity-10 bg-white/10 backdrop-blur-lg max-w-md w-full mx-4 transition-all duration-300 hover:shadow-blue-500/20 hover:border-opacity-20">
+
+    <!-- API Response Heading -->
+    <h2 class="text-white/50 text-lg font-bold uppercase tracking-widest mb-2">API RESPONSE</h2>
+
+    <!-- Main Greeting -->
+    <h1 id="greetingText" class="text-4xl text-white drop-shadow-lg mb-2">
+      Hello, <span id="userNameSpan" class="text-blue-400">Your Name</span>
+    </h1>
+
+    <!-- Error Message -->
+    <p id="errorMessage" class="text-red-400 text-sm hidden">Something went wrong. Please try again later.</p>
+
+    <!-- Form -->
+    <form id="nameForm" class="space-y-5">
+      <div>
+        <input type="text" id="userName"
+          class="py-2 px-4 mt-10 rounded-xl w-full bg-white/20 text-white border border-blue-500/50 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition duration-200 placeholder:text-white/50"
+          placeholder="What's your name?" required />
+      </div>
+      <button type="submit"
+        class="py-2 px-4 bg-blue-500 text-white font-medium rounded-xl w-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400/50 transition duration-200">
+        Greet Me
+      </button>
+    </form>
+  </div>
+
+  <script>
+    const nameForm = document.getElementById('nameForm');
+    const userNameInput = document.getElementById('userName');
+    const userNameSpan = document.getElementById('userNameSpan');
+    const greetingText = document.getElementById('greetingText');
+    const errorMessage = document.getElementById('errorMessage');
+
+    nameForm.addEventListener('submit', async function (event) {
+      event.preventDefault();
+      const name = userNameInput.value.trim();
+      if (!name) return;
+
+      try {
+        const response = await fetch('http://localhost:3000/greet', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name })
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          userNameSpan.textContent = data.message.replace('Hello ', '');
+          greetingText.style.display = 'block';
+          errorMessage.classList.add('hidden');
+        } else {
+          errorMessage.textContent = 'Something went wrong. Please try again later.';
+          userNameSpan.textContent = 'Your Name';
+          greetingText.style.display = 'block';
+          errorMessage.classList.remove('hidden');
+        }
+
+      } catch (error) {
+        errorMessage.textContent = 'Server is unavailable. Please try again later.';
+        userNameSpan.textContent = 'Your Name';
+        greetingText.style.display = 'block';
+        errorMessage.classList.remove('hidden');
+      }
+      userNameInput.value = '';
+    });
+  </script>
+
+</body>
+
+</html>
