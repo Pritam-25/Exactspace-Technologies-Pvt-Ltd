@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hello Your Name</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="h-screen bg-gradient-to-br from-[#03010f] via-[#131040] to-[#0f0f1b] flex items-center justify-center font-sans">
+
+    <!-- greeting and form --> 
+    <div class="text-center p-8 rounded-3xl shadow-2xl border border-white border-opacity-10 bg-white/10 backdrop-blur-lg max-w-md w-full mx-4 transition-all duration-300 hover:shadow-blue-500/20 hover:border-opacity-20">
+
+        <!-- Greeting text  -->
+        <h1 id="greetingText" class="text-4xl text-white drop-shadow-lg mb-10">
+            Hello, <span id="userNameSpan" class="text-blue-400">Your Name</span>
+        </h1>
+
+        <!-- Input Form for User Name -->
+        <form id="nameForm" class="space-y-5">
+            <div>
+                <input 
+                    type="text" 
+                    id="userName" 
+                    class="py-2 px-4 rounded-xl w-full bg-white/20 text-white border border-blue-500/50 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition duration-200 placeholder:text-white/50"
+                    placeholder="Enter Your Name"
+                    required
+                />
+            </div>
+            <button 
+                type="submit" 
+                class="py-2 px-4 bg-blue-500 text-white font-medium rounded-xl w-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400/50 focus:ring-offset-2 focus:ring-offset-transparent transition duration-200"
+            >
+                Greet Me
+            </button>
+        </form>
+
+    </div>
+
+    <script>
+        // Get the form and greeting text elements
+        const nameForm = document.getElementById('nameForm');
+        const userNameInput = document.getElementById('userName');
+        const userNameSpan = document.getElementById('userNameSpan');
+
+        // Handle form submission
+        nameForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form reload
+
+            // Get the value from the input field
+            const userName = userNameInput.value.trim();
+
+            // Update the greeting text with the user's name
+            if (userName) {
+                userNameSpan.textContent = userName;
+            } else {
+                userNameSpan.textContent = 'Your Name';
+            }
+
+            // Clear the input field after submission
+            userNameInput.value = '';
+            userNameInput.focus();
+        });
+    </script>
+
+</body>
+
+</html>
