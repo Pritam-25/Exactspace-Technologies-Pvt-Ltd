@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JSON Validator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Modern Scrollbar */
+        textarea::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        textarea::-webkit-scrollbar-thumb {
+            background: rgba(59, 130, 246, 0.6);
+            /* Tailwind blue-500 */
+            border-radius: 6px;
+        }
+
+        textarea::-webkit-scrollbar-track {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body
+    class="min-h-screen bg-gradient-to-br from-[#03010f] via-[#131040] to-[#0f0f1b] flex items-center justify-center font-sans">
+
+    <div
+        class="bg-white/10 backdrop-blur-lg border border-white/10 rounded-3xl shadow-2xl p-8 max-w-xl w-full mx-4 text-center hover:shadow-blue-500/20 hover:border-opacity-20 transition-all duration-300">
+        <h1 class="text-white text-3xl font-semibold mb-6 drop-shadow-md">JSON Validator</h1>
+
+        <textarea id="jsonInput" placeholder="Paste your JSON here..."
+            class="w-full h-80 max-h-full p-4 rounded-xl bg-white/20 text-white border border-blue-500/50 focus:outline-none focus:ring-2 focus:ring-blue-400/30 placeholder:text-white/50 transition duration-200 resize-y overflow-auto"></textarea>
+
+        <div class="flex flex-col sm:flex-row gap-4 mt-6">
+            <button onclick="validateJSON()"
+                class="flex-1 py-2 px-4 bg-blue-500 text-white font-medium rounded-xl hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400/50 transition duration-200">
+                Validate
+            </button>
+
+            <button onclick="resetForm()"
+                class="flex-1 py-2 px-4 bg-white text-gray-800 font-medium rounded-xl border border-gray-300 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-white/30 transition duration-200 inline-flex justify-center items-center gap-2">
+                <!-- Heroicons: Arrow Path (Refresh) -->
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M4.5 12a7.5 7.5 0 0113.193-4.942m0 0l-3.193-.558m3.193.558l-.558-3.193M19.5 12a7.5 7.5 0 01-13.193 4.942m0 0l3.193.558m-3.193-.558l.558 3.193" />
+                </svg>
+                Reset
+            </button>
+        </div>
+
+        <p id="resultMessage" class="mt-6 text-lg font-semibold"></p>
+    </div>
+
+    <script>
+        function validateJSON() {
+            const input = document.getElementById('jsonInput').value.trim();
+            const result = document.getElementById('resultMessage');
+
+            try {
+                JSON.parse(input);
+                result.textContent = "✅ Valid JSON";
+                result.className = "mt-6 text-lg font-semibold text-green-400";
+            } catch {
+                result.textContent = "❌ Invalid JSON";
+                result.className = "mt-6 text-lg font-semibold text-red-400";
+            }
+        }
+
+        function resetForm() {
+            const textarea = document.getElementById('jsonInput');
+            textarea.value = '';
+            document.getElementById('resultMessage').textContent = '';
+        }
+    </script>
+
+</body>
+
+</html>
