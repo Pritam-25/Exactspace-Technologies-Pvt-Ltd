@@ -1,14 +1,14 @@
-# Internship Assignment - Frontend & Backend Integration
+# Exactspace Technologies Pvt Ltd Data Integration Internship – Assignment
 
 ## How to Run
 
 1. Install dependencies:
 ```bash
 npm install
-npm i express
-npm i cors
-npm i nodemon
-npm i dotenv
+npm i express     # Web server framework
+npm i cors        # Cross-origin resource sharing
+npm i nodemon     # Auto-restart server on changes
+npm i dotenv      # Environment variables
 ```
 
 2. Create `.env` file:
