@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interactive Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Modern Scrollbar for Textarea */
+        textarea::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        textarea::-webkit-scrollbar-thumb {
+            background: rgba(59, 130, 246, 0.6);
+            border-radius: 6px;
+        }
+
+        textarea::-webkit-scrollbar-track {
+            background: transparent;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-[#03010f] via-[#131040] to-[#0f0f1b] flex  justify-center font-sans">
+
+    <!-- Container for side-by-side layout -->
+    <div class="flex flex-wrap items-center justify-center  gap-12 max-w-6xl w-full">
+
+        <!-- Greeting Section -->
+        <div class="text-center p-8  rounded-3xl shadow-2xl border border-white border-opacity-10 bg-white/10 backdrop-blur-lg max-w-md w-full mx-4 transition-all duration-300 hover:shadow-blue-500/20 hover:border-opacity-20">
+            <h1 id="greetingText" class="text-4xl text-white drop-shadow-lg mb-2">
+                Hello, <span id="userNameSpan" class="text-blue-400">Your Name</span>
+            </h1>
+            <p id="errorMessage" class="text-red-400 text-sm mb-4 hidden">Something went wrong. Please try again later.</p>
+            <form id="nameForm" class="space-y-5">
+                <div>
+                    <input type="text" id="userName"
+                        class="py-2 px-4 mt-10 rounded-xl w-full bg-white/20 text-white border border-blue-500/50 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500/30 transition duration-200 placeholder:text-white/50"
+                        placeholder="What's your name?" required />
+                </div>
+                <div class="flex justify-between gap-2">
+                    <button type="submit"
+                        class="py-2 px-4 bg-blue-500 text-white font-medium rounded-xl w-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400/50 transition duration-200">
+                        Greet Me
+                    </button>
+                    <button type="button" id="resetButton"
+                        class="flex items-center justify-center gap-2 py-2 px-4 bg-white text-gray-800 font-semibold rounded-xl w-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400/50 transition duration-200">
+                        <!-- Heroicons: Refresh -->
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M4.5 12a7.5 7.5 0 0113.193-4.942m0 0l-3.193-.558m3.193.558l-.558-3.193M19.5 12a7.5 7.5 0 01-13.193 4.942m0 0l3.193.558m-3.193-.558l.558 3.193" />
+                        </svg>
+                        Reset
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- JSON Validator Section -->
+        <div
+            class="bg-white/10 backdrop-blur-lg border border-white/10 rounded-3xl shadow-2xl p-8 max-w-xl w-full mx-4 text-center hover:shadow-blue-500/20 hover:border-opacity-20 transition-all duration-300">
+            <h1 class="text-white text-3xl font-semibold mb-6 drop-shadow-md">JSON Validator</h1>
+            <textarea id="jsonInput" placeholder="Paste your JSON here..."
+                class="w-full h-80 max-h-full p-4 rounded-xl bg-white/20 text-white border border-blue-500/50 focus:outline-none focus:ring-2 focus:ring-blue-400/30 placeholder:text-white/50 transition duration-200 resize-y overflow-auto"></textarea>
+            <div class="flex flex-col sm:flex-row gap-4 mt-6">
+                <button onclick="validateJSON()"
+                    class="flex-1 py-2 px-4 bg-blue-500 text-white font-medium rounded-xl hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400/50 transition duration-200">
+                    Validate
+                </button>
+                <button onclick="resetForm()"
+                    class="flex-1 py-2 px-4 bg-white text-gray-800 font-medium rounded-xl border border-gray-300 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-white/30 transition duration-200 inline-flex justify-center items-center gap-2">
+                    <!-- Heroicons: Arrow Path (Refresh) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M4.5 12a7.5 7.5 0 0113.193-4.942m0 0l-3.193-.558m3.193.558l-.558-3.193M19.5 12a7.5 7.5 0 01-13.193 4.942m0 0l3.193.558m-3.193-.558l.558 3.193" />
+                    </svg>
+                    Reset
+                </button>
+            </div>
+            <p id="resultMessage" class="mt-6 text-lg font-semibold"></p>
+        </div>
+
+    </div>
+
+    <script>
+        // Greet User Functionality
+        const nameForm = document.getElementById('nameForm');
+        const userNameInput = document.getElementById('userName');
+        const userNameSpan = document.getElementById('userNameSpan');
+        const greetingText = document.getElementById('greetingText');
+        const errorMessage = document.getElementById('errorMessage');
+        const resetButton = document.getElementById('resetButton');
+
+        nameForm.addEventListener('submit', async function (event) {
+            event.preventDefault();
+            const name = userNameInput.value.trim();
+
+            if (!name) return;
+
+            try {
+                const response = await fetch('http://localhost:3000/greet', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    userNameSpan.textContent = data.message.replace('Hello ', '');
+                    greetingText.style.display = 'block';
+                    errorMessage.classList.add('hidden');
+                } else {
+                    errorMessage.textContent = 'Something went wrong. Please try again later.';
+                    userNameSpan.textContent = 'Your Name';
+                    greetingText.style.display = 'block';
+                    errorMessage.classList.remove('hidden');
+                }
+
+            } catch (error) {
+                errorMessage.textContent = 'Server is unavailable. Please try again later.';
+                userNameSpan.textContent = 'Your Name';
+                greetingText.style.display = 'block';
+                errorMessage.classList.remove('hidden');
+            }
+            userNameInput.value = '';
+        });
+
+        // Reset User Info
+        resetButton.addEventListener('click', function () {
+            userNameInput.value = '';
+            userNameSpan.textContent = 'Your Name';
+            errorMessage.classList.add('hidden');
+        });
+
+        // JSON Validator Functionality
+        function validateJSON() {
+            const input = document.getElementById('jsonInput').value.trim();
+            const result = document.getElementById('resultMessage');
+
+            try {
+                JSON.parse(input);
+                result.textContent = "✅ Valid JSON";
+                result.className = "mt-6 text-lg font-semibold text-green-400";
+            } catch {
+                result.textContent = "❌ Invalid JSON";
+                result.className = "mt-6 text-lg font-semibold text-red-400";
+            }
+        }
+
+        // Reset JSON Validator
+        function resetForm() {
+            const textarea = document.getElementById('jsonInput');
+            textarea.value = '';
+            document.getElementById('resultMessage').textContent = '';
+        }
+    </script>
+
+</body>
+
+</html>
